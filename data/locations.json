@@ -1,0 +1,82 @@
+{
+  "Warehouse": {
+    "name": "Central Warehouse",
+    "lat": 17.4485835,
+    "lng": 78.3908034,
+    "type": "warehouse",
+    "area_type": "industrial",
+    "difficulty_score": 1.0
+  },
+  "Miyapur": {
+    "name": "Miyapur",
+    "lat": 17.4948034,
+    "lng": 78.3593425,
+    "type": "delivery_point",
+    "area_type": "residential",
+    "difficulty_score": 1.2
+  },
+  "Kukatpally": {
+    "name": "Kukatpally",
+    "lat": 17.4849878,
+    "lng": 78.4138092,
+    "type": "delivery_point",
+    "area_type": "mixed",
+    "difficulty_score": 1.3
+  },
+  "Ameerpet": {
+    "name": "Ameerpet",
+    "lat": 17.4374507,
+    "lng": 78.4482346,
+    "type": "delivery_point",
+    "area_type": "commercial",
+    "difficulty_score": 1.5
+  },
+  "Madhapur": {
+    "name": "Madhapur",
+    "lat": 17.4485835,
+    "lng": 78.3908034,
+    "type": "delivery_point",
+    "area_type": "commercial",
+    "difficulty_score": 1.4
+  },
+  "Gachibowli": {
+    "name": "Gachibowli",
+    "lat": 17.4400802,
+    "lng": 78.3489168,
+    "type": "delivery_point",
+    "area_type": "commercial",
+    "difficulty_score": 1.3
+  },
+  "Hitech City": {
+    "name": "Hitech City",
+    "lat": 17.4474,
+    "lng": 78.3745,
+    "type": "delivery_point",
+    "area_type": "commercial",
+    "difficulty_score": 1.6
+  },
+  "Kondapur": {
+    "name": "Kondapur",
+    "lat": 17.4647,
+    "lng": 78.3643,
+    "type": "delivery_point",
+    "area_type": "residential",
+    "difficulty_score": 1.2
+  },
+  "Begumpet": {
+    "name": "Begumpet",
+    "lat": 17.4399,
+    "lng": 78.4676,
+    "type": "delivery_point",
+    "area_type": "mixed",
+    "difficulty_score": 1.4
+  },
+  "Secunderabad": {
+    "name": "Secunderabad",
+    "lat": 17.4399,
+    "lng": 78.4983,
+    "type": "delivery_point",
+    "area_type": "commercial",
+    "difficulty_score": 1.5
+  }
+}

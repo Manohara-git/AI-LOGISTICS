@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Logistics & Route Optimization System</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1>🚚 AI Logistics System</h1>
+      <p class="subtitle">Smart Navigation & Route Optimization</p>
+    </div>
+    <div class="header-stats" id="headerStats">
+      <div class="stat-item">
+        <span class="stat-value" id="totalDeliveries">0</span>
+        <span class="stat-label">Total Deliveries</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="activeRoutes">0</span>
+        <span class="stat-label">Active Routes</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h2>📍 Route Planner</h2>
+
+        <div class="form-group">
+          <label>Starting Point</label>
+          <select id="startLocation" class="input-field">
+            <option value="Warehouse">Warehouse (Default)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Optimization Algorithm</label>
+          <select id="algorithm" class="input-field">
+            <option value="genetic">Genetic Algorithm (Best for Multi-Stop)</option>
+            <option value="nearest_neighbor">Nearest Neighbor (Fast)</option>
+            <option value="dijkstra">Dijkstra (Shortest Path)</option>
+            <option value="a_star">A* (Heuristic)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Delivery Stops</label>
+          <div id="stopsList" class="stops-list"></div>
+          <select id="addStopSelect" class="input-field">
+            <option value="">-- Add a stop --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Traffic Conditions</label>
+          <div class="conditions-grid">
+            <div class="condition-item">
+              <label class="condition-label">Hour</label>
+              <input type="number" id="hour" class="input-field-small" min="0" max="23" value="14">
+            </div>
+            <div class="condition-item">
+              <label class="condition-label">Day</label>
+              <select id="day" class="input-field-small">
+                <option value="0">Mon</option>
+                <option value="1">Tue</option>
+                <option value="2" selected>Wed</option>
+                <option value="3">Thu</option>
+                <option value="4">Fri</option>
+                <option value="5">Sat</option>
+                <option value="6">Sun</option>
+              </select>
+            </div>
+            <div class="condition-item">
+              <label class="condition-label">Weather</label>
+              <select id="weather" class="input-field-small">
+                <option value="clear" selected>Clear</option>
+                <option value="rain">Rain</option>
+                <option value="heavy_rain">Heavy Rain</option>
+                <option value="fog">Fog</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button id="optimizeBtn" class="btn-primary">
+          <span class="btn-icon">🎯</span>
+          Optimize Route
+        </button>
+
+        <button id="clearBtn" class="btn-secondary">
+          Clear All
+        </button>
+      </div>
+
+      <!-- Results Section -->
+      <div class="sidebar-section" id="resultsSection" style="display: none;">
+        <h3>📊 Route Results</h3>
+        <div id="routeResults" class="results-content"></div>
+      </div>
+
+      <!-- Deliveries Section -->
+      <div class="sidebar-section">
+        <h3>📦 Active Deliveries</h3>
+        <div id="deliveriesList" class="deliveries-list">
+          <p class="empty-state">No active deliveries</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map Container -->
+    <main class="map-container">
+      <div id="map" class="map"></div>
+
+      <!-- Map Controls Overlay -->
+      <div class="map-controls">
+        <button id="centerMapBtn" class="map-control-btn" title="Center Map">
+          🎯
+        </button>
+        <button id="toggleTrafficBtn" class="map-control-btn" title="Toggle Traffic">
+          🚦
+        </button>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Optimizing route...</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Submit Delivery Modal -->
+  <div id="submitModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>📦 Submit Delivery</h3>
+        <button class="modal-close" onclick="closeSubmitModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Recipient Name *</label>
+          <input type="text" id="recipientName" class="input-field" placeholder="Enter recipient name" required>
+        </div>
+        <div class="form-group">
+          <label>Delivery Notes</label>
+          <textarea id="deliveryNotes" class="input-field" rows="4"
+            placeholder="Optional notes (e.g., left at front door, signed by...)"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeSubmitModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitDeliveryConfirmation()">
+          <span class="btn-icon">✓</span>
+          Confirm Delivery
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
